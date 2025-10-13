@@ -1,0 +1,13 @@
+com\eventmanager\controller\DeleteEventServlet.class
+com\eventmanager\controller\RegisterServlet.class
+com\eventmanager\model\User.class
+com\eventmanager\controller\CreateEventServlet.class
+com\eventmanager\dao\EventDAO.class
+com\eventmanager\dao\UserDAO.class
+com\eventmanager\controller\ImageServlet.class
+com\eventmanager\model\Event.class
+com\eventmanager\controller\HomeServlet.class
+com\eventmanager\controller\LoginServlet.class
+com\eventmanager\util\DBUtil.class
+com\eventmanager\controller\EditEventServlet.class
+com\eventmanager\controller\EventDetailServlet.class
