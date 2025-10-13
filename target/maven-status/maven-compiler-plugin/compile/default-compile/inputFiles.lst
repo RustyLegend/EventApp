@@ -5,8 +5,12 @@ C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\contro
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\HomeServlet.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\ImageServlet.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\LoginServlet.java
+C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\LogoutServlet.java
+C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\RegisterForEventServlet.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\RegisterServlet.java
+C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\controller\UnregisterForEventServlet.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\dao\EventDAO.java
+C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\dao\RegistrationDAO.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\dao\UserDAO.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\model\Event.java
 C:\Users\rahul\OneDrive\Documents\EventApp\src\main\java\com\eventmanager\model\User.java
