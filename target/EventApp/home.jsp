@@ -5,7 +5,9 @@
     <title>Upcoming Events</title>
 </head>
 <body>
-    <a href="create-event.jsp">Create a New Event</a>
+    <c:if test="${sessionScope.loggedInUser.role == 'organizer'}">
+        <a href="create-event.jsp">Create a New Event</a>
+    </c:if>
     <h1>Upcoming Events</h1>
     <ul>
         <c:forEach var="event" items="${eventList}">
