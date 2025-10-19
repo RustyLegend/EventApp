@@ -28,7 +28,7 @@
         </div>
         
         <div style="text-align: center; margin-bottom: 40px;">
-             <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Upcoming Events</h1>
+             <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Find your next experience</h1>
              <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Events hosted by the community, for the community.</p>
         </div>
 
@@ -42,7 +42,7 @@
                      onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='#333';">
                     
                     <a href="<c:url value='/event?id=${event.eventId}' />" style="display: block; position: relative;">
-                        <img src="<c:url value='/event-images/${event.imageUrl}' />" alt="${event.title}" style="width: 100%; height: 180px; object-fit: cover; display: block; border-bottom: 1px solid #333;">
+                        <img src="<c:url value='/event-images/${event.imageUrl}' />" alt="${event.title}" style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 1px solid #333;">
                         
                         <div class="date-badge" style="position: absolute; top: 12px; left: 12px; background-color: rgba(0,0,0,0.6); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8em; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);">
                             ${event.eventDatetime.toString().substring(0, 10)}
@@ -58,7 +58,6 @@
                     </div>
                 </div>
             </c:forEach>
-
         </div>
     </div>
 </body>

@@ -1,9 +1,7 @@
 package com.eventmanager.controller;
-
 import com.eventmanager.dao.EventDAO;
 import com.eventmanager.model.Event;
 import com.eventmanager.model.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +17,10 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 @WebServlet("/createEvent")
-@MultipartConfig // Required for handling file uploads
+@MultipartConfig
 public class CreateEventServlet extends HttpServlet {
 
     private EventDAO eventDAO;
-    // Defines the upload directory using Java's modern Path API
     private static final Path UPLOAD_DIRECTORY = Paths.get(System.getProperty("user.home"), "event-images");
 
     @Override
@@ -35,7 +32,6 @@ public class CreateEventServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        // Security Check 1: Is a user logged in?
         if (session == null || session.getAttribute("loggedInUser") == null) {
             response.sendRedirect("login.jsp");
             return;
@@ -43,18 +39,15 @@ public class CreateEventServlet extends HttpServlet {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-        // Security Check 2: Is the user an organizer?
         if (!"organizer".equals(loggedInUser.getRole())) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "You must be an organizer to create an event.");
             return;
         }
 
         try {
-            // This is the real organizer ID from the logged-in user
             int organizerId = loggedInUser.getId();
-
-            // The rest of your code is the same...
             Files.createDirectories(UPLOAD_DIRECTORY);
+
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             LocalDateTime eventDatetime = LocalDateTime.parse(request.getParameter("eventDatetime"));
@@ -63,6 +56,14 @@ public class CreateEventServlet extends HttpServlet {
 
             Part filePart = request.getPart("image");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+            // Check if a file was actually uploaded
+            if (fileName == null || fileName.trim().isEmpty()) {
+                session.setAttribute("createEventError", "Please upload a banner image for the event.");
+                response.sendRedirect("create-event.jsp");
+                return; // Stop further processing
+            }
+
             Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
             filePart.write(filePath.toString());
 
@@ -72,15 +73,20 @@ public class CreateEventServlet extends HttpServlet {
             newEvent.setEventDatetime(eventDatetime);
             newEvent.setVenue(venue);
             newEvent.setCategoryId(categoryId);
-            newEvent.setOrganizerId(organizerId); // Using the real ID now
+            newEvent.setOrganizerId(organizerId);
             newEvent.setImageUrl(fileName);
 
             eventDAO.createEvent(newEvent);
+            
+            // Clear any old error messages from the session on success
+            session.removeAttribute("createEventError");
             response.sendRedirect("home");
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException("Error creating event", e);
+            // Redirect back to the form with a generic error message
+            session.setAttribute("createEventError", "An error occurred while creating the event. Please check your inputs.");
+            response.sendRedirect("create-event.jsp");
         }
     }
 }

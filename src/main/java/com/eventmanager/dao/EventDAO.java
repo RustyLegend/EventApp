@@ -15,7 +15,12 @@ public class EventDAO {
      */
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-        String sql = "SELECT * FROM events WHERE event_datetime >= NOW() ORDER BY event_datetime ASC";
+        // 1. UPDATED SQL QUERY with JOINs to fetch organizer and category names
+        String sql = "SELECT e.*, u.name AS organizer_name, c.name AS category_name " +
+                     "FROM events e " +
+                     "JOIN users u ON e.organizer_id = u.user_id " +
+                     "JOIN categories c ON e.category_id = c.category_id " +
+                     "WHERE e.event_datetime >= NOW() ORDER BY e.event_datetime ASC";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -29,6 +34,11 @@ public class EventDAO {
                 event.setVenue(rs.getString("venue"));
                 event.setImageUrl(rs.getString("image_url"));
                 event.setOrganizerId(rs.getInt("organizer_id"));
+                
+                // 2. SET THE NEWLY FETCHED NAMES ON THE EVENT OBJECT
+                event.setOrganizerName(rs.getString("organizer_name"));
+                event.setCategoryName(rs.getString("category_name"));
+
                 events.add(event);
             }
         } catch (SQLException e) {
