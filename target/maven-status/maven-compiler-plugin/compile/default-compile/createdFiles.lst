@@ -1,8 +1,12 @@
 com\eventmanager\controller\DeleteEventServlet.class
 com\eventmanager\controller\RegisterServlet.class
+com\eventmanager\controller\RegisterForEventServlet.class
 com\eventmanager\model\User.class
+com\eventmanager\controller\LogoutServlet.class
+com\eventmanager\controller\UnregisterForEventServlet.class
 com\eventmanager\controller\CreateEventServlet.class
 com\eventmanager\dao\EventDAO.class
+com\eventmanager\dao\RegistrationDAO.class
 com\eventmanager\dao\UserDAO.class
 com\eventmanager\controller\ImageServlet.class
 com\eventmanager\model\Event.class
