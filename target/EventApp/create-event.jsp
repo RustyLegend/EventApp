@@ -11,10 +11,7 @@
         <div id="imagePreviewContainer" style="width: 350px; height: 500px; background-color: #ffeb3b; color: #111; border-radius: 16px; padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
             <div id="defaultPreviewContent">
                 <div style="font-size: 3em; font-weight: bold; line-height: 1.1;">
-                    YOU'RE<br>ON THE<br>GUEST-<br>LIST*
-                </div>
-                <div style="font-size: 1.2em; text-align: right; font-weight: 500;">
-                    *HOW<br>LUCKY<br>YOU<br>ARE
+                    UPLOAD<br>A PHOTO
                 </div>
             </div>
             <img id="imagePreview" src="#" alt="Event Banner Preview" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
@@ -31,7 +28,8 @@
                         <p style="color: #ff8a80; text-align: center; background-color: rgba(255, 138, 128, 0.1); padding: 10px; border-radius: 8px; border: 1px solid #ff8a80; margin-bottom: 20px;">
                             ${sessionScope.createEventError}
                         </p>
-                        <c:remove var="createEventError" scope="session"/> </c:if>
+                        <c:remove var="createEventError" scope="session"/>
+                    </c:if>
                 
                     <div style="margin-bottom: 20px;">
                         <label style="color: #aaa; font-size: 0.9em; margin-bottom: 8px; display: block;">Date and Time</label>
@@ -40,9 +38,7 @@
 
                     <div style="margin-bottom: 20px;">
                         <label style="color: #aaa; font-size: 0.9em; margin-bottom: 8px; display: block;">Location</label>
-                        <input type="text" name="venue" id="venueInput" required placeholder="Offline location or virtual link" style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #444; border-radius: 8px; color: #ffffff; font-size: 1em; box-sizing: border-box;">
-                        
-                        <div id="map" style="width: 100%; height: 250px; margin-top: 15px; border-radius: 8px; background-color: #2a2a2a;"></div>
+                        <input type="text" name="venue" required placeholder="Offline location or virtual link" style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #444; border-radius: 8px; color: #ffffff; font-size: 1em; box-sizing: border-box;">
                     </div>
 
                     <div style="margin-bottom: 20px;">
@@ -98,48 +94,6 @@
             }
         });
     </script>
-
-    <script>
-        let map;
-        let marker;
-        let geocoder;
-        let timeout;
-
-        function initMap() {
-            const defaultLocation = { lat: 20.5937, lng: 78.9629 };
-            geocoder = new google.maps.Geocoder();
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 5,
-                center: defaultLocation,
-                styles: [ { elementType: "geometry", stylers: [{ color: "#242f3e" }] }, { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] }, { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] }, { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] }, { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] }, { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] }, { featureType: "transit", elementType: "geometry", stylers: [{ color: "#2f3948" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] }, { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] }, ]
-            });
-            marker = new google.maps.Marker({ map: map });
-        }
-
-        const venueInput = document.getElementById('venueInput');
-
-        venueInput.addEventListener('input', function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                geocodeAddress(venueInput.value);
-            }, 1000);
-        });
-
-        function geocodeAddress(address) {
-            if (!address) return;
-            geocoder.geocode({ 'address': address }, function(results, status) {
-                if (status === 'OK') {
-                    map.setCenter(results[0].geometry.location);
-                    map.setZoom(15);
-                    marker.setPosition(results[0].geometry.location);
-                } else {
-                    console.error('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
-    </script>
-    
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 
 </body>
 </html>

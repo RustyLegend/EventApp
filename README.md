@@ -15,7 +15,6 @@ A full-featured, modern event management platform built with Java Servlets, JSP,
 ### Organizer Features
 * **Create Events:** A sophisticated event creation form with a two-column layout.
 * **Live Image Preview:** The banner image is instantly shown on a preview card when selected, before uploading.
-* **Live Map Preview:** The event location is shown on an interactive Google Map as the organizer types the address.
 * **Event Management:** Organizers can edit and delete the events they have created.
 * **Error Handling:** Users are prompted with clear error messages, such as when they forget to upload an image.
 
@@ -32,7 +31,6 @@ A full-featured, modern event management platform built with Java Servlets, JSP,
 * **Database:** MySQL
 * **Web Server:** Apache Tomcat
 * **Build Tool:** Apache Maven
-* **APIs:** Google Maps Platform (JavaScript API, Geocoding API)
 
 ---
 
@@ -48,8 +46,8 @@ Follow these steps to get the project running on your local machine.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/RustyLegend/EventApp.git
-cd EventApp
+git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+cd your-repo-name
 ```
 
 ### 2. Database Setup
@@ -93,8 +91,7 @@ cd EventApp
 
 ### 3. Configuration
 1.  **Database Connection:** Open `src/main/java/com/eventmanager/util/DBUtil.java` and update the database URL, username, and password to match your local MySQL setup.
-2.  **Google Maps API Key:** Open `src/main/webapp/create-event.jsp`, find the `<script>` tag at the bottom that loads the Google Maps API, and replace `YOUR_API_KEY` with your actual key.
-3.  **Image Upload Path:** The application saves uploaded images to `System.getProperty("user.home")/event-images`. Ensure this directory is writable.
+2.  **Image Upload Path:** The application saves uploaded images to a folder specified in `CreateEventServlet.java`. By default, this is a folder like `C:\EventAppImages`. Ensure this directory exists and is writable by the Tomcat user.
 
 ### 4. Build and Deploy
 1.  Build the project using Maven:
