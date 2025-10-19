@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder; // Import URLEncoder
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -20,18 +21,24 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         User user = userDAO.getUserByEmail(email);
 
-        if (user != null && user.getPassword().equals(password)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("loggedInUser", user);
-            response.sendRedirect("home");
-        } else 
-        {
-            // FAILURE: User is invalid
-            // 1. Set the error message in the request scope
-            request.setAttribute("errorMessage", "Email or password incorrect");
+        if (user == null) {
+            // CASE 1: User does not exist. Redirect to the register page.
+            // We pass the email as a URL parameter to pre-fill the form.
+            String encodedEmail = URLEncoder.encode(email, "UTF-8");
+            response.sendRedirect("register.jsp?email=" + encodedEmail);
 
-            // 2. Forward the request back to the login page
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            // CASE 2: User exists, now check the password.
+            if (user.getPassword().equals(password)) {
+                // SUCCESS: Password matches.
+                HttpSession session = request.getSession();
+                session.setAttribute("loggedInUser", user);
+                response.sendRedirect("home");
+            } else {
+                // FAILURE: Password is incorrect.
+                request.setAttribute("errorMessage", "Password incorrect");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
         }
     }
 }
