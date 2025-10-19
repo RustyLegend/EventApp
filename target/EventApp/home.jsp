@@ -15,13 +15,15 @@
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding: 10px 0;">
             <div>
-                <a href="<c:url value='/home' />" style="font-size: 1.5em; font-weight: bold; color: #ffffff; text-decoration: none;">Discover</a>
+                <c:if test="${not empty sessionScope.loggedInUser}">
+                    <span style="font-size: 1.5em; font-weight: bold; color: #ffffff;">Hello, ${sessionScope.loggedInUser.name}!</span>
+                </c:if>
             </div>
             <div>
                 <c:if test="${sessionScope.loggedInUser.role == 'organizer'}">
                     <a href="create-event.jsp" style="text-decoration: none; color: #bbbbbb; font-weight: 500; margin-right: 20px;">Create Event</a>
                 </c:if>
-                <c:if test="${sessionScope.loggedInUser != null}">
+                <c:if test="${not empty sessionScope.loggedInUser}">
                     <a href="<c:url value='/logout' />" style="display: inline-block; padding: 8px 18px; background-color: #2a2a2a; color: #ffffff; text-decoration: none; border-radius: 20px; font-weight: 500; border: 1px solid #444;">Logout</a>
                 </c:if>
             </div>
