@@ -25,18 +25,6 @@ A full-featured, modern event management platform built with Java Servlets, JSP,
 
 ---
 
-## 📸 Screenshots
-
-*(You can add your own screenshots here to showcase the application)*
-
-| Home Page                               | Event Detail Page                          |
-| --------------------------------------- | ------------------------------------------ |
-| ![Home Page](link-to-your-screenshot)   | ![Event Detail](link-to-your-screenshot)   |
-| **Create Event Page** | **Login Page** |
-| ![Create Event](link-to-your-screenshot) | ![Login Page](link-to-your-screenshot)     |
-
----
-
 ## 🛠️ Technologies Used
 
 * **Backend:** Java, Java Servlets, JSP, JSTL
