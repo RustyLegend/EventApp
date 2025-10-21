@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
                 // SUCCESS: Password matches.
                 HttpSession session = request.getSession();
                 session.setAttribute("loggedInUser", user);
-                response.sendRedirect("home");
+                response.sendRedirect("welcome.jsp");
             } else {
                 // FAILURE: Password is incorrect.
                 request.setAttribute("errorMessage", "Password incorrect");

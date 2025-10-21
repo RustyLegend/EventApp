@@ -140,4 +140,37 @@ public class EventDAO {
             e.printStackTrace();
         }
     }
+
+    public List<Event> getRegisteredEventsByUserId(int userId) {
+        List<Event> events = new ArrayList<>();
+        // This query joins events and registrations tables
+        String sql = "SELECT e.*, c.name AS category_name, u.name AS organizer_name " +
+                    "FROM events e " +
+                    "JOIN registrations r ON e.event_id = r.event_id " +
+                    "JOIN categories c ON e.category_id = c.category_id " +
+                    "JOIN users u ON e.organizer_id = u.user_id " +
+                    "WHERE r.user_id = ? AND e.event_datetime >= NOW() " +
+                    "ORDER BY e.event_datetime ASC";
+
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+                event.setEventId(rs.getInt("event_id"));
+                event.setTitle(rs.getString("title"));
+                event.setEventDatetime(rs.getTimestamp("event_datetime").toLocalDateTime());
+                event.setImageUrl(rs.getString("image_url"));
+                event.setOrganizerName(rs.getString("organizer_name"));
+                event.setCategoryName(rs.getString("category_name"));
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
 }
