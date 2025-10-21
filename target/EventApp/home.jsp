@@ -158,8 +158,8 @@
             </div>
             
             <div style="text-align: center; margin-bottom: 40px;">
-                 <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Find your next experience</h1>
-                 <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Events hosted by the community, for the community.</p>
+                 <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Upcoming Events</h1>
+                 <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Find your next experience</p>
             </div>
 
             <div class="events-container">
