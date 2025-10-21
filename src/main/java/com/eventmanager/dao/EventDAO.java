@@ -8,14 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventDAO {
-
-    /**
-     * Fetches all events from the database that are scheduled for the future.
-     * @return A list of Event objects.
-     */
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-        // 1. UPDATED SQL QUERY with JOINs to fetch organizer and category names
         String sql = "SELECT e.*, u.name AS organizer_name, c.name AS category_name " +
                      "FROM events e " +
                      "JOIN users u ON e.organizer_id = u.user_id " +
@@ -34,11 +28,8 @@ public class EventDAO {
                 event.setVenue(rs.getString("venue"));
                 event.setImageUrl(rs.getString("image_url"));
                 event.setOrganizerId(rs.getInt("organizer_id"));
-                
-                // 2. SET THE NEWLY FETCHED NAMES ON THE EVENT OBJECT
                 event.setOrganizerName(rs.getString("organizer_name"));
                 event.setCategoryName(rs.getString("category_name"));
-
                 events.add(event);
             }
         } catch (SQLException e) {
@@ -46,12 +37,6 @@ public class EventDAO {
         }
         return events;
     }
-
-    /**
-     * Fetches a single, detailed event by its ID, including organizer and category names.
-     * @param eventId The ID of the event to fetch.
-     * @return An Event object, or null if not found.
-     */
     public Event getEventById(int eventId) {
         Event event = null;
         String sql = "SELECT e.*, u.name AS organizer_name, c.name AS category_name " +
@@ -62,10 +47,8 @@ public class EventDAO {
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, eventId);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 event = new Event();
                 event.setEventId(rs.getInt("event_id"));
@@ -83,17 +66,10 @@ public class EventDAO {
         }
         return event;
     }
-
-    /**
-     * Inserts a new event into the database.
-     * @param event The Event object to be created.
-     */
     public void createEvent(Event event) {
         String sql = "INSERT INTO events (title, description, event_datetime, venue, image_url, organizer_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, event.getTitle());
             stmt.setString(2, event.getDescription());
             stmt.setTimestamp(3, Timestamp.valueOf(event.getEventDatetime()));
@@ -106,11 +82,6 @@ public class EventDAO {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Updates an existing event in the database.
-     * @param event The Event object with updated information.
-     */
     public void updateEvent(Event event) {
         String sql = "UPDATE events SET title = ?, description = ?, event_datetime = ?, venue = ? WHERE event_id = ?";
         try (Connection conn = DBUtil.getConnection();
@@ -125,11 +96,6 @@ public class EventDAO {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Deletes an event from the database.
-     * @param eventId The ID of the event to delete.
-     */
     public void deleteEvent(int eventId) {
         String sql = "DELETE FROM events WHERE event_id = ?";
         try (Connection conn = DBUtil.getConnection();
@@ -143,7 +109,6 @@ public class EventDAO {
 
     public List<Event> getRegisteredEventsByUserId(int userId) {
         List<Event> events = new ArrayList<>();
-        // This query joins events and registrations tables
         String sql = "SELECT e.*, c.name AS category_name, u.name AS organizer_name " +
                     "FROM events e " +
                     "JOIN registrations r ON e.event_id = r.event_id " +
@@ -153,11 +118,9 @@ public class EventDAO {
                     "ORDER BY e.event_datetime ASC";
 
         try (Connection conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+            PreparedStatement stmt = conn.prepareStatement(sql)) {     
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 Event event = new Event();
                 event.setEventId(rs.getInt("event_id"));

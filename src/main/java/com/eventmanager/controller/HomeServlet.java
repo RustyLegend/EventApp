@@ -24,26 +24,19 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        // 1. Get all events
         List<Event> allEvents = eventDAO.getAllEvents();
         request.setAttribute("eventList", allEvents);
-
         // 2. Get the user's registered events (ONLY for attendees)
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("loggedInUser") != null) {
             User user = (User) session.getAttribute("loggedInUser");
 
-            // --- THIS IS THE UPDATED LOGIC ---
             // Only fetch registered events if the user is an 'attendee'
             if ("attendee".equals(user.getRole())) {
                 List<Event> myRegisteredEvents = eventDAO.getRegisteredEventsByUserId(user.getId());
                 request.setAttribute("myRegisteredEvents", myRegisteredEvents);
             }
-            // --- END OF UPDATE ---
         }
-
-        // 3. Forward to the JSP
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 }

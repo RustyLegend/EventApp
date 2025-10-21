@@ -30,12 +30,8 @@ public class EventDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int eventId = Integer.parseInt(request.getParameter("id"));
-
-            // 1. Fetch the main event details
             Event event = eventDAO.getEventById(eventId);
             request.setAttribute("event", event);
-
-            // 2. Fetch the list of attendees for this event
             List<User> attendeeList = registrationDAO.getAttendeesForEvent(eventId);
             request.setAttribute("attendeeList", attendeeList);
 
@@ -47,7 +43,6 @@ public class EventDetailServlet extends HttpServlet {
                 isUserRegistered = registrationDAO.isUserRegistered(loggedInUser.getId(), eventId);
             }
             request.setAttribute("isUserRegistered", isUserRegistered);
-            // 3. Forward to the JSP for display
             request.getRequestDispatcher("event-detail.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {

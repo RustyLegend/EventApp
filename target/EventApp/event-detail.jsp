@@ -8,16 +8,65 @@
 <html>
 <head>
     <title>${event.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            margin: 0; 
+            padding: 20px; /* Added padding for mobile */
+            box-sizing: border-box;
+        }
+        
+        .event-detail-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .image-column {
+            width: 40%;
+            max-width: 450px;
+            flex-shrink: 0;
+        }
+        
+        .details-column {
+            width: 60%;
+            min-width: 0; /* Prevents text overflow issues */
+        }
+        
+        /* --- 3. THIS IS THE MOBILE FIX --- */
+        @media (max-width: 768px) {
+            .event-detail-container {
+                /* Stacks the columns vertically */
+                flex-direction: column;
+                align-items: center; /* Centers them */
+            }
+            
+            .image-column {
+                width: 100%; /* Makes image full-width */
+            }
+            
+            .details-column {
+                width: 100%; /* Makes details full-width */
+            }
+        }
+    </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 40px;">
+<body>
 
-    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; max-width: 1200px; margin: 0 auto;">
+    <div class="event-detail-container">
 
-        <div class="image-container" style="width: 40%; max-width: 450px;">
+        <div class="image-column">
             <img src="<c:url value='/event-images/${event.imageUrl}' />" alt="${event.title}" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
         </div>
 
-        <div class="details-container" style="width: 60%;">
+        <div class="details-column">
             <p style="font-size: 1em; color: #bb86fc; font-weight: 500; margin: 0 0 5px 0;">${event.categoryName}</p>
             <h1 style="color: #ffffff; margin-top: 0; margin-bottom: 15px; font-size: 2.8em; line-height: 1.2;">${event.title}</h1>
             

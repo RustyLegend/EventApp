@@ -14,21 +14,16 @@ import java.io.IOException;
 public class UnregisterForEventServlet extends HttpServlet {
     private RegistrationDAO registrationDAO;
     public void init() { registrationDAO = new RegistrationDAO(); }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User loggedInUser = (session != null) ? (User) session.getAttribute("loggedInUser") : null;
-
         if (loggedInUser == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         int userId = loggedInUser.getId();
-
         registrationDAO.unregisterUserFromEvent(userId, eventId);
-
         response.sendRedirect("event?id=" + eventId);
     }
 }

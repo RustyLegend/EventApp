@@ -56,7 +56,6 @@ public class EditEventServlet extends HttpServlet {
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         Event eventToUpdate = eventDAO.getEventById(eventId);
 
-        // Final security check before updating the database
         if (eventToUpdate != null && eventToUpdate.getOrganizerId() == loggedInUser.getId()) {
             eventToUpdate.setTitle(request.getParameter("title"));
             eventToUpdate.setDescription(request.getParameter("description"));

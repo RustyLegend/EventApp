@@ -3,21 +3,84 @@
 <html>
 <head>
     <title>Create New Event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            margin: 0; 
+            padding: 20px; /* Added padding for mobile */
+            box-sizing: border-box;
+        }
+        
+        .create-event-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .preview-column {
+            width: 350px; 
+            height: 500px; 
+            background-color: #ffeb3b; 
+            color: #111; 
+            border-radius: 16px; 
+            padding: 30px; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            position: relative; 
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .form-column {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        /* --- 3. THIS IS THE MOBILE FIX --- */
+        @media (max-width: 768px) {
+            .create-event-container {
+                /* Stacks the columns vertically */
+                flex-direction: column;
+                align-items: center; /* Centers them */
+                gap: 20px;
+            }
+            
+            .preview-column {
+                width: 100%; /* Makes preview full-width */
+                max-width: 350px; /* But not too wide */
+                height: auto; /* Lets height be automatic */
+                aspect-ratio: 350 / 500; /* Keeps the original shape */
+            }
+            
+            .form-column {
+                width: 100%; /* Makes form full-width */
+            }
+        }
+    </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 40px;">
+<body>
 
-    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 40px;">
+    <div class="create-event-container">
 
-        <div id="imagePreviewContainer" style="width: 350px; height: 500px; background-color: #ffeb3b; color: #111; border-radius: 16px; padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+        <div id="imagePreviewContainer" class="preview-column">
             <div id="defaultPreviewContent">
-                <div style="font-size: 3em; font-weight: bold; line-height: 1.1;">
-                    UPLOAD<br>A PHOTO
+                <div style="font-size: 2.8em; font-weight: bold; line-height: 1.1;">
+                    UPLOAD<br>A<br>PHOTO<br>FOR<br>PREVIEW
                 </div>
             </div>
             <img id="imagePreview" src="#" alt="Event Banner Preview" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
         </div>
 
-        <div class="form-container" style="max-width: 500px; width: 100%;">
+        <div class="form-column">
             <form action="createEvent" method="post" enctype="multipart/form-data">
 
                 <input type="text" name="title" required placeholder="Event Name" style="width: 100%; padding: 10px 0; margin-bottom: 25px; background-color: transparent; border: none; border-bottom: 2px solid #444; color: #ffffff; font-size: 2.5em; font-weight: bold; box-sizing: border-box;">
@@ -94,6 +157,5 @@
             }
         });
     </script>
-
 </body>
 </html>

@@ -47,26 +47,20 @@ public class CreateEventServlet extends HttpServlet {
         try {
             int organizerId = loggedInUser.getId();
             Files.createDirectories(UPLOAD_DIRECTORY);
-
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             LocalDateTime eventDatetime = LocalDateTime.parse(request.getParameter("eventDatetime"));
             String venue = request.getParameter("venue");
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-
             Part filePart = request.getPart("image");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-            // Check if a file was actually uploaded
             if (fileName == null || fileName.trim().isEmpty()) {
                 session.setAttribute("createEventError", "Please upload a banner image for the event.");
                 response.sendRedirect("create-event.jsp");
-                return; // Stop further processing
+                return;
             }
-
             Path filePath = UPLOAD_DIRECTORY.resolve(fileName);
             filePart.write(filePath.toString());
-
             Event newEvent = new Event();
             newEvent.setTitle(title);
             newEvent.setDescription(description);
@@ -75,16 +69,11 @@ public class CreateEventServlet extends HttpServlet {
             newEvent.setCategoryId(categoryId);
             newEvent.setOrganizerId(organizerId);
             newEvent.setImageUrl(fileName);
-
             eventDAO.createEvent(newEvent);
-            
-            // Clear any old error messages from the session on success
             session.removeAttribute("createEventError");
             response.sendRedirect("home");
-
         } catch (Exception e) {
             e.printStackTrace();
-            // Redirect back to the form with a generic error message
             session.setAttribute("createEventError", "An error occurred while creating the event. Please check your inputs.");
             response.sendRedirect("create-event.jsp");
         }
