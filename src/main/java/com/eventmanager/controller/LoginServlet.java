@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.URLEncoder; // Import URLEncoder
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -21,24 +20,24 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         User user = userDAO.getUserByEmail(email);
 
-        if (user == null) {
-            // CASE 1: User does not exist. Redirect to the register page.
-            // We pass the email as a URL parameter to pre-fill the form.
-            String encodedEmail = URLEncoder.encode(email, "UTF-8");
-            response.sendRedirect("register.jsp?email=" + encodedEmail);
-
-        } else {
-            // CASE 2: User exists, now check the password.
-            if (user.getPassword().equals(password)) {
-                // SUCCESS: Password matches.
+        // Check 1: Does the user exist and is the password correct?
+        if (user != null && user.getPassword().equals(password)) {
+            
+            // Check 2: Is the user verified?
+            if (user.isVerified()) {
+                // SUCCESS: Log them in
                 HttpSession session = request.getSession();
                 session.setAttribute("loggedInUser", user);
                 response.sendRedirect("welcome.jsp");
             } else {
-                // FAILURE: Password is incorrect.
-                request.setAttribute("errorMessage", "Password incorrect");
+                // FAILURE: User is not verified
+                request.setAttribute("errorMessage", "Your account is not verified. Please check your email.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
+        } else {
+            // FAILURE: Email or password incorrect
+            request.setAttribute("errorMessage", "Email or password incorrect");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 }

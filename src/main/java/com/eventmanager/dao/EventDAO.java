@@ -136,4 +136,23 @@ public class EventDAO {
         }
         return events;
     }
+
+    public String getEventTitleById(int eventId) {
+        String title = null;
+        String sql = "SELECT title FROM events WHERE event_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, eventId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                title = rs.getString("title");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return title;
+    }
 }

@@ -1,5 +1,4 @@
 package com.eventmanager.controller;
-
 import com.eventmanager.dao.UserDAO;
 import com.eventmanager.model.User;
 import javax.servlet.ServletException;
@@ -20,9 +19,8 @@ public class RegisterServlet extends HttpServlet {
         user.setEmail(request.getParameter("email"));
         user.setPassword(request.getParameter("password"));
         user.setRole(request.getParameter("role"));
-
         userDAO.createUser(user);
-
-        response.sendRedirect("login.jsp");
+        request.setAttribute("successMessage", "Registration successful! Please check your email to verify your account.");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }

@@ -43,33 +43,36 @@
         }
         
         .desktop-hello {
-            display: none;
+            display: none; /* Hide "Hello" text on mobile */
         }
         
         .close-sidebar-btn {
-            display: inline-block;
+            display: inline-block; /* Show close button on mobile */
         }
 
+        /* Sidebar styles for mobile (slide-out) */
         .sidebar {
             width: 280px;
-            background-color: rgba(30, 30, 30, 0.9);
+            background-color: rgba(30, 30, 30, 0.9); /* Semi-transparent */
             backdrop-filter: blur(8px);
             border-right: 1px solid #333;
             padding: 20px;
             box-sizing: border-box;
             height: 100vh;
-            position: fixed;
+            position: fixed; /* Fixed position to overlay content */
             top: 0;
             left: 0;
             z-index: 1000;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%); /* Hide it off-screen */
+            transition: transform 0.3s ease-in-out; /* Animation */
         }
 
+        /* This class is added by JS to show the sidebar */
         .sidebar-open {
             transform: translateX(0);
         }
 
+        /* Dark overlay for dimming the main content */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -78,7 +81,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+            z-index: 999; /* Below sidebar, above content */
         }
         
         .sidebar-overlay-open {
@@ -93,11 +96,11 @@
             }
 
             .hamburger-btn {
-                display: none;
+                display: none; /* Hide hamburger on desktop */
             }
             
             .desktop-hello {
-                display: inline-block;
+                display: inline-block; /* Show "Hello" text on desktop */
             }
 
             .main-content {
@@ -105,21 +108,22 @@
                 min-width: 0;
             }
 
+            /* Reset sidebar styles for desktop (sticky) */
             .sidebar {
                 position: sticky !important; 
                 transform: translateX(0) !important;
-                background-color: #1e1e1e !important;
+                background-color: #1e1e1e !important; /* Not transparent */
                 backdrop-filter: none !important;
                 z-index: 1 !important;
                 height: 100vh !important;
             }
             
             .close-sidebar-btn {
-                display: none;
+                display: none; /* Hide close button on desktop */
             }
             
             .sidebar-overlay {
-                display: none !important;
+                display: none !important; /* Never show overlay on desktop */
             }
         }
     </style>
@@ -158,8 +162,8 @@
             </div>
             
             <div style="text-align: center; margin-bottom: 40px;">
-                 <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Upcoming Events</h1>
-                 <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Find your next experience</p>
+                 <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Find your next experience</h1>
+                 <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Events hosted by the community, for the community.</p>
             </div>
 
             <div class="events-container">

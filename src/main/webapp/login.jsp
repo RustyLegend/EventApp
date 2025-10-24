@@ -7,8 +7,14 @@
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
 
-    <div style="max-width: 400px; width: 100%; padding: 0 20px;">
+    <div style="max-width: 400px; width: 100%; padding: 0 20px; box-sizing: border-box;">
         <form action="login" method="post" style="background-color: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+            
+            <c:if test="${not empty successMessage}">
+                <p style="color: #4CAF50; text-align: center; background-color: rgba(76, 175, 80, 0.1); padding: 10px; border-radius: 8px; border: 1px solid #4CAF50; margin-bottom: 20px;">
+                    ${successMessage}
+                </p>
+            </c:if>
             <h2 style="text-align: center; color: #ffffff; margin-top: 0; margin-bottom: 25px; font-size: 1.8em;">Login</h2>
 
             <c:if test="${not empty errorMessage}">
