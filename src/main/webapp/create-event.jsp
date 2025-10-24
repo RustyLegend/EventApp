@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <style>
+        /* --- UPDATED: Animation Keyframes --- */
+        @keyframes fadeInRise {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             background-color: #121212; 
             color: #e0e0e0; 
             margin: 0; 
-            padding: 20px; /* Added padding for mobile */
+            padding: 20px;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .create-event-container {
@@ -22,6 +29,8 @@
             gap: 40px;
             max-width: 900px;
             margin: 0 auto;
+            /* --- UPDATED: Applying the new animation --- */
+            animation: fadeInRise 0.6s ease-out;
         }
         
         .preview-column {
@@ -45,24 +54,22 @@
             width: 100%;
         }
         
-        /* --- 3. THIS IS THE MOBILE FIX --- */
         @media (max-width: 768px) {
             .create-event-container {
-                /* Stacks the columns vertically */
                 flex-direction: column;
-                align-items: center; /* Centers them */
+                align-items: center;
                 gap: 20px;
             }
             
             .preview-column {
-                width: 100%; /* Makes preview full-width */
-                max-width: 350px; /* But not too wide */
-                height: auto; /* Lets height be automatic */
-                aspect-ratio: 350 / 500; /* Keeps the original shape */
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+                aspect-ratio: 350 / 500;
             }
             
             .form-column {
-                width: 100%; /* Makes form full-width */
+                width: 100%;
             }
         }
     </style>
@@ -74,7 +81,7 @@
         <div id="imagePreviewContainer" class="preview-column">
             <div id="defaultPreviewContent">
                 <div style="font-size: 2.8em; font-weight: bold; line-height: 1.1;">
-                    UPLOAD<br>A<br>PHOTO<br>FOR<br>PREVIEW
+                    UPLOAD<br>A<br>PHOTO
                 </div>
             </div>
             <img id="imagePreview" src="#" alt="Event Banner Preview" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">

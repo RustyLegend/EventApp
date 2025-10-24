@@ -18,8 +18,11 @@ public class UserDAO {
             stmt.setString(4, user.getRole());
             stmt.setString(5, token);
             stmt.executeUpdate();
-            EmailService.sendVerificationEmail(user.getName(), user.getEmail(), token);
-        } catch (SQLException e) {
+            new Thread(() -> {
+                EmailService.sendVerificationEmail(user.getName(), user.getEmail(), token);
+            }).start();
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

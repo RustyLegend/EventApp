@@ -155,4 +155,40 @@ public class EventDAO {
         }
         return title;
     }
+
+    public List<Event> getEventsByOrganizerId(int organizerId) {
+        List<Event> events = new ArrayList<>();
+        // Query joins events, users, and categories, filtering by organizer_id
+        String sql = "SELECT e.*, u.name AS organizer_name, c.name AS category_name " +
+                    "FROM events e " +
+                    "JOIN users u ON e.organizer_id = u.user_id " +
+                    "JOIN categories c ON e.category_id = c.category_id " +
+                    "WHERE e.organizer_id = ? " +
+                    "ORDER BY e.event_datetime DESC"; // Show newest first, perhaps?
+
+        try (Connection conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, organizerId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+                event.setEventId(rs.getInt("event_id"));
+                event.setTitle(rs.getString("title"));
+                event.setEventDatetime(rs.getTimestamp("event_datetime").toLocalDateTime());
+                event.setVenue(rs.getString("venue")); // Added venue
+                event.setImageUrl(rs.getString("image_url"));
+                event.setOrganizerId(rs.getInt("organizer_id")); // Keep organizer ID
+                event.setOrganizerName(rs.getString("organizer_name")); // Keep organizer name
+                event.setCategoryName(rs.getString("category_name"));
+                // Add description if needed for display later
+                // event.setDescription(rs.getString("description")); 
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
 }

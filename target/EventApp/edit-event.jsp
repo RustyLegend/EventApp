@@ -4,10 +4,18 @@
 <head>
     <title>Edit Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        /* --- UPDATED: Animation Keyframes --- */
+        @keyframes fadeInRise {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 40px 0;">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 40px 0; -webkit-tap-highlight-color: transparent;">
 
-    <div style="max-width: 500px; width: 100%; padding: 0 20px;">
+    <div style="max-width: 500px; width: 100%; padding: 0 20px; box-sizing: border-box; animation: fadeInRise 0.6s ease-out;">
         <form action="editEvent" method="post" style="background-color: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
 
             <h1 style="text-align: center; color: #ffffff; margin-top: 0; margin-bottom: 30px;">Edit Event</h1>

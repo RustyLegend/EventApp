@@ -4,10 +4,17 @@
 <head>
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; -webkit-tap-highlight-color: transparent;">
 
-    <div style="max-width: 400px; width: 100%; padding: 0 20px; box-sizing: border-box;">
+    <div style="max-width: 400px; width: 100%; padding: 0 20px; box-sizing: border-box; animation: scaleUp 0.6s ease-out;">
         <form action="login" method="post" style="background-color: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
             
             <c:if test="${not empty successMessage}">
@@ -15,6 +22,7 @@
                     ${successMessage}
                 </p>
             </c:if>
+
             <h2 style="text-align: center; color: #ffffff; margin-top: 0; margin-bottom: 25px; font-size: 1.8em;">Login</h2>
 
             <c:if test="${not empty errorMessage}">
