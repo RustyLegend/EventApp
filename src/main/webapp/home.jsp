@@ -1,201 +1,254 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
-    // Page caching headers (still good to keep for the HTML page itself)
     response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
     response.setHeader("Pragma","no-cache");
     response.setDateHeader ("Expires", 0);
 %>
 <html>
 <head>
-    <title>Discover Events</title>
+    <title>Events</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <style>
-        /* Animation keyframes removed */
-
+        /* --- Base Styles --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #121212;
             color: #e0e0e0;
             margin: 0;
-            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight */
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.2s ease;
         }
 
+        /* --- Main Layout --- */
+        .page-container {
+            display: flex;
+            align-items: flex-start;
+        }
         .main-content {
-            padding: 20px;
+            flex-grow: 1;
+            padding: 24px 32px;
             box-sizing: border-box;
-            width: 100%;
-            /* Animation and opacity properties removed */
+            min-width: 0;
         }
 
-        .events-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+        /* --- Header Section --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            flex-wrap: wrap; /* Allow wrapping */
+            gap: 10px; /* Space when wrapped */
         }
-
-        /* --- Mobile Styles (Default) --- */
-
+        .header-left { /* Container for hamburger/title */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title {
+            font-size: 2em;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0; /* Remove default margin */
+        }
+        .header-actions {
+            text-align: right;
+            margin-left: auto; /* Push actions to the right */
+        }
+        .header-actions a {
+            color: #bbbbbb;
+            font-weight: 500;
+            margin-left: 16px;
+            padding: 8px 16px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            white-space: nowrap;
+            display: inline-block; /* Helps with spacing */
+        }
+        .header-actions a:hover {
+            background-color: #1e1e1e;
+            border-color: #555;
+            color: #ffffff;
+        }
         .hamburger-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 10px;
+            background: none; border: none; color: white;
+            font-size: 28px; cursor: pointer; padding: 5px; /* Adjust padding */
             z-index: 500;
+            display: none; /* Hidden by default */
         }
 
-        .desktop-hello {
-            display: none; /* Hide "Hello" text on mobile */
+        /* --- Events Timeline --- */
+        .events-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding-left: 30px;
+        }
+        .events-timeline::before { /* Timeline line */
+            content: ''; position: absolute; left: 8px; top: 10px; bottom: 10px;
+            width: 2px; background-color: #2a2a2a;
+        }
+        .timeline-group { margin-bottom: 48px; position: relative; }
+        .timeline-group::before { /* Timeline circle */
+            content: ''; position: absolute; left: -23px; top: 8px;
+            width: 12px; height: 12px; background-color: #e0e0e0;
+            border: 2px solid #121212; border-radius: 50%; z-index: 1;
+        }
+        .timeline-date {
+            font-size: 1.3em; font-weight: 600; color: #ffffff; margin-bottom: 24px;
+        }
+        .timeline-date span { font-weight: 400; color: #aaaaaa; margin-left: 8px; }
+
+        /* --- Event Card --- */
+        .event-card {
+            display: flex; gap: 20px; align-items: center;
+            background-color: #1e1e1e; border: 1px solid #333; border-radius: 12px;
+            padding: 16px; margin-bottom: 16px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            color: #e0e0e0;
+        }
+        .event-card:hover { background-color: #2a2a2a; border-color: #555; }
+        .card-details { flex-grow: 1; }
+        .card-time { font-size: 0.9em; font-weight: 500; color: #ffffff; margin-bottom: 12px; }
+        .card-title { font-size: 1.4em; font-weight: 600; color: #ffffff; margin: 0 0 8px 0; line-height: 1.3; }
+        .card-meta { font-size: 0.9em; color: #aaaaaa; margin-bottom: 4px; display: block; }
+        .card-image-wrapper { width: 120px; height: 120px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+        .card-image { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Sidebar & Mobile --- */
+        .sidebar { display: none; } /* Hidden by default */
+        .close-sidebar-btn { display: none; } /* Hidden by default */
+
+        /* Styles for mobile slide-out sidebar */
+        @media (max-width: 992px) { /* Increased breakpoint for sidebar slide-out */
+             .hamburger-btn { display: inline-block; } /* Show hamburger */
+             .sidebar {
+                display: block; /* Make sure it's displayable */
+                width: 280px; background-color: rgba(30, 30, 30, 0.9);
+                backdrop-filter: blur(8px); border-right: 1px solid #333;
+                padding: 24px; box-sizing: border-box; height: 100vh;
+                position: fixed; top: 0; left: 0; z-index: 1000;
+                transform: translateX(-100%); transition: transform 0.3s ease-in-out;
+                overflow-y: auto;
+             }
+             .sidebar-open { transform: translateX(0); }
+             .close-sidebar-btn {
+                display: block; background: none; border: none;
+                color: #aaa; font-size: 2em; cursor: pointer; padding: 0;
+                position: absolute; top: 16px; right: 20px;
+             }
+             .sidebar-overlay {
+                display: none; position: fixed; top: 0; left: 0;
+                width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;
+             }
+             .sidebar-overlay-open { display: block; }
+             .main-content { padding: 16px; }
+             .events-timeline { padding-left: 20px; }
+             .timeline-group::before { left: -13px; }
+             .page-header { flex-direction: row; } /* Keep row layout but allow wrap */
+             .header-actions { margin-left: 0; width: auto; } /* Adjust width for wrapping */
+             .header-actions a { margin-left: 10px; padding: 6px 12px; }
+             .event-card { flex-direction: column-reverse; align-items: flex-start; }
+
+             /* --- UPDATED IMAGE WRAPPER --- */
+             .card-image-wrapper {
+                 width: 100%;
+                 height: auto; /* Remove fixed height */
+                 margin-bottom: 16px;
+                 aspect-ratio: 16 / 9; /* Maintain a common widescreen aspect ratio */
+             }
+             /* --- END OF UPDATE --- */
+
         }
 
-        .close-sidebar-btn {
-            display: inline-block; /* Show close button on mobile */
+        /* Desktop specific overrides (Sticky sidebar) */
+        @media (min-width: 993px) { /* Corresponds to max-width above */
+             .sidebar {
+                 display: block !important; /* Ensure it shows */
+                 position: sticky !important; transform: translateX(0) !important;
+                 background-color: #1e1e1e !important; backdrop-filter: none !important;
+                 z-index: 1 !important; height: 100vh !important;
+                 width: 320px; border-right: 1px solid #333; padding: 24px;
+                 box-sizing: border-box; flex-shrink: 0; overflow-y: auto;
+             }
+             .hamburger-btn { display: none !important; }
+             .close-sidebar-btn { display: none !important; }
+             .sidebar-overlay { display: none !important; }
         }
 
-        /* Sidebar styles for mobile (slide-out) */
-        .sidebar {
-            width: 280px;
-            background-color: rgba(30, 30, 30, 0.9); /* Semi-transparent */
-            backdrop-filter: blur(8px);
-            border-right: 1px solid #333;
-            padding: 20px;
-            box-sizing: border-box;
-            height: 100vh;
-            position: fixed; /* Fixed position to overlay content */
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            transform: translateX(-100%); /* Hide it off-screen */
-            transition: transform 0.3s ease-in-out; /* Slide Animation */
-        }
+         /* Sidebar content styling (for both mobile and desktop) */
+         .sidebar h2 { color: #ffffff; margin-top: 0; margin-bottom: 24px; font-size: 1.3em; font-weight: 600; }
+         .sidebar ul { list-style: none; padding: 0; margin: 0; }
+         .sidebar li { margin-bottom: 16px; }
+         .sidebar a { text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 8px; transition: background-color 0.2s ease; }
+         .sidebar a:hover { background-color: #2a2a2a; }
+         .sidebar img { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+         .sidebar .event-title { color: #e0e0e0; font-weight: 500; font-size: 0.95em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+         .sidebar .event-date { color: #aaaaaa; font-size: 0.8em; }
+         .sidebar .no-events { color: #aaaaaa; font-size: 0.9em; font-style: italic; }
 
-        .sidebar-open {
-            transform: translateX(0);
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .sidebar-overlay-open {
-            display: block;
-        }
-
-        /* --- Desktop Styles (Overrides) --- */
-        @media (min-width: 769px) {
-            .main-flex-container {
-                display: flex;
-                align-items: flex-start;
-            }
-
-            .hamburger-btn {
-                display: none;
-            }
-
-            .desktop-hello {
-                display: inline-block;
-            }
-
-            .main-content {
-                flex-grow: 1;
-                min-width: 0;
-            }
-
-            .sidebar {
-                position: sticky !important;
-                transform: translateX(0) !important;
-                background-color: #1e1e1e !important;
-                backdrop-filter: none !important;
-                z-index: 1 !important;
-                height: 100vh !important;
-            }
-
-            .close-sidebar-btn {
-                display: none;
-            }
-
-            .sidebar-overlay {
-                display: none !important;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div class="main-flex-container">
-
+    <div class="page-container">
         <c:if test="${sessionScope.loggedInUser.role == 'attendee'}">
             <jsp:include page="sidebar.jsp" />
             <div id="sidebarOverlay" class="sidebar-overlay"></div>
         </c:if>
 
         <div class="main-content">
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding: 10px 0;">
-
-                <div>
-                    <c:if test="${sessionScope.loggedInUser.role == 'attendee'}">
+            <header class="page-header">
+                <div class="header-left">
+                     <c:if test="${sessionScope.loggedInUser.role == 'attendee'}">
                         <button id="openSidebarBtn" class="hamburger-btn">&#9776;</button>
                     </c:if>
-
-                    <c:if test="${not empty sessionScope.loggedInUser}">
-                        <span class="desktop-hello" style="font-size: 1.5em; font-weight: bold; color: #ffffff;">Hello, ${sessionScope.loggedInUser.name}!</span>
-                    </c:if>
+                    <h1 class="header-title">Events</h1>
                 </div>
-
-                <div>
-                    <c:if test="${sessionScope.loggedInUser.role == 'organizer'}">
-                        <a href="dashboard" style="text-decoration: none; color: #bbbbbb; font-weight: 500; margin-right: 20px;">My Dashboard</a>
-                    </c:if>
-                    <c:if test="${sessionScope.loggedInUser.role == 'organizer'}">
-                        <a href="create-event.jsp" style="text-decoration: none; color: #bbbbbb; font-weight: 500; margin-right: 20px;">Create Event</a>
+                <div class="header-actions">
+                     <c:if test="${sessionScope.loggedInUser.role == 'organizer'}">
+                        <a href="dashboard">Dashboard</a>
+                        <a href="create-event.jsp">+ Submit Event</a>
                     </c:if>
                     <c:if test="${not empty sessionScope.loggedInUser}">
-                        <a href="<c:url value='/logout' />" style="display: inline-block; padding: 8px 18px; background-color: #2a2a2a; color: #ffffff; text-decoration: none; border-radius: 20px; font-weight: 500; border: 1px solid #444;">Logout</a>
+                         <a href="<c:url value='/logout' />">Logout</a>
                     </c:if>
                 </div>
-            </div>
+            </header>
 
-            <div style="text-align: center; margin-bottom: 40px;">
-                 <h1 style="font-size: 3em; color: #ffffff; margin: 0;">Find your next experience</h1>
-                 <p style="font-size: 1.2em; color: #aaaaaa; margin-top: 10px;">Events hosted by the community, for the community.</p>
-            </div>
-
-            <div class="events-container">
-                <c:forEach var="event" items="${eventList}">
-                    <div class="event-card"
-                         style="background-color: #1e1e1e; border: 1px solid #333; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); overflow: hidden; text-decoration: none; color: #e0e0e0; transition: all 0.2s ease-in-out;"
-                         onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#555';"
-                         onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='#333';">
-
-                        <a href="<c:url value='/event?id=${event.eventId}' />" style="display: block; position: relative;">
-                            <img src="<c:url value='/event-images/${event.imageUrl}' />" alt="${event.title}" style="width: 100%; height: 300px; object-fit: cover; display: block; border-bottom: 1px solid #333;">
-                            <div class="date-badge" style="position: absolute; top: 12px; left: 12px; background-color: rgba(0,0,0,0.6); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8em; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);">
-                                ${event.eventDatetime.toString().substring(0, 10)}
-                            </div>
-                        </a>
-
-                        <div class="card-content" style="padding: 15px;">
-                            <p style="font-size: 0.9em; color: #bb86fc; font-weight: 500; margin: 0 0 5px 0;">${event.categoryName}</p>
-                            <a href="<c:url value='/event?id=${event.eventId}' />" style="text-decoration: none;">
-                                <h3 style="font-size: 1.2em; color: #ffffff; margin: 0 0 8px 0; font-weight: 600;">${event.title}</h3>
+            <div class="events-timeline">
+                <c:forEach var="group" items="${groupedEvents}">
+                    <div class="timeline-group">
+                        <h2 class="timeline-date">
+                            ${fn:split(group.key, '|')[0]} <%-- Today --%>
+                            <span>${fn:split(group.key, '|')[1]}</span> <%-- Friday --%>
+                        </h2>
+                        <c:forEach var="event" items="${group.value}">
+                            <a href="<c:url value='/event?id=${event.eventId}' />" class="event-card">
+                                <div class="card-details">
+                                    <p class="card-time">${event.eventDatetime.toLocalTime()}</p>
+                                    <h3 class="card-title">${event.title}</h3>
+                                    <span class="card-meta">By ${event.organizerName}</span>
+                                    <span class="card-meta">${event.venue}</span>
+                                </div>
+                                <div class="card-image-wrapper">
+                                    <img src="<c:url value='/event-images/${event.imageUrl}' />" alt="${event.title}" class="card-image">
+                                </div>
                             </a>
-                            <p style="font-size: 0.9em; color: #aaaaaa; margin: 0;">Hosted by ${event.organizerName}</p>
-                        </div>
+                        </c:forEach>
                     </div>
                 </c:forEach>
             </div>
-
         </div>
     </div>
 
@@ -203,30 +256,30 @@
         if (document.getElementById('sidebar')) {
             const sidebar = document.getElementById('sidebar');
             const openBtn = document.getElementById('openSidebarBtn');
-            const closeBtn = document.getElementById('closeSidebarBtn');
+            const closeBtn = document.getElementById('closeSidebarBtn'); // Ensure ID exists in sidebar.jsp
             const overlay = document.getElementById('sidebarOverlay');
 
             function openSidebar() {
-                sidebar.classList.add('sidebar-open');
-                overlay.classList.add('sidebar-overlay-open');
+                if (sidebar && overlay) { // Check if elements exist
+                    sidebar.classList.add('sidebar-open');
+                    overlay.classList.add('sidebar-overlay-open');
+                }
             }
-
             function closeSidebar() {
-                sidebar.classList.remove('sidebar-open');
-                overlay.classList.remove('sidebar-overlay-open');
+                 if (sidebar && overlay) { // Check if elements exist
+                    sidebar.classList.remove('sidebar-open');
+                    overlay.classList.remove('sidebar-overlay-open');
+                 }
             }
 
-            openBtn.addEventListener('click', openSidebar);
-            closeBtn.addEventListener('click', closeSidebar);
-            overlay.addEventListener('click', closeSidebar);
+            if (openBtn) openBtn.addEventListener('click', openSidebar);
+            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if (overlay) overlay.addEventListener('click', closeSidebar);
         }
     </script>
-
     <script>
         window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
+            if (event.persisted) { window.location.reload(); }
         });
     </script>
 </body>

@@ -33,7 +33,7 @@ public class DeleteEventServlet extends HttpServlet {
 
             if (event != null && event.getOrganizerId() == loggedInUser.getId()) {
                 eventDAO.deleteEvent(eventId);
-                response.sendRedirect("home");
+                response.sendRedirect("dashboard");
             } else {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to delete this event.");
             }
