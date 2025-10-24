@@ -165,7 +165,7 @@
                  width: 100%;
                  height: auto; /* Remove fixed height */
                  margin-bottom: 16px;
-                 aspect-ratio: 16 / 9; /* Maintain a common widescreen aspect ratio */
+                 aspect-ratio: 3 / 4 ; /* Maintain a common widescreen aspect ratio */
              }
              /* --- END OF UPDATE --- */
 
@@ -175,7 +175,7 @@
         @media (min-width: 993px) { /* Corresponds to max-width above */
              .sidebar {
                  display: block !important; /* Ensure it shows */
-                 position: sticky !important; transform: translateX(0) !important;
+                 position: fixed !important; transform: translateX(0) !important;
                  background-color: #1e1e1e !important; backdrop-filter: none !important;
                  z-index: 1 !important; height: 100vh !important;
                  width: 320px; border-right: 1px solid #333; padding: 24px;

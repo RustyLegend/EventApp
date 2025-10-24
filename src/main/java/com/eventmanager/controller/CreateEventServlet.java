@@ -71,7 +71,7 @@ public class CreateEventServlet extends HttpServlet {
             newEvent.setImageUrl(fileName);
             eventDAO.createEvent(newEvent);
             session.removeAttribute("createEventError");
-            response.sendRedirect("home");
+            response.sendRedirect("dashboard");
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("createEventError", "An error occurred while creating the event. Please check your inputs.");
